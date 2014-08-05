@@ -3,6 +3,10 @@
 //http://www.scriptingforsport.com/playing-with-tdd-fizzbuzz-in-rust/
 //by Sami Elahmadie of http://samielahmadie.me
 
+#![feature(phase)]
+#[phase(plugin)]
+extern crate regex_macros;
+extern crate regex;
 extern crate test;
 
 mod rustic {
@@ -82,13 +86,49 @@ fn main() {
 
 #[cfg(test)]
 mod testee {
-
+    use std::rand;
+    use std::rand::distributions::{IndependentSample, Range};
     use test::Bencher;
 
     use rustic::fizzbuzz;
     use imperative::{original, func_call, simplified};
 
     static BENCH_SIZE: int = 4096;
+
+    //regex example also taken from Sami, but modified to take function
+    fn regex_tester(fzbz: fn(int) -> String) {
+        let between = Range::new(1i, 1000);
+        let mut rng = rand::task_rng();
+        let regex_fizz = regex!(r"Fizz");
+        let regex_buzz = regex!(r"[Bb]uzz");
+        let regex_fizzbuzz = regex!(r"Fizzbuzz");
+
+        for _ in range(0i, 50) {
+            assert!(regex_fizz.is_match(fzbz(3 * between.ind_sample(&mut rng)).as_slice()));
+            assert!(regex_buzz.is_match(fzbz(5 * between.ind_sample(&mut rng)).as_slice()));
+            assert!(regex_fizzbuzz.is_match(fzbz(15 * between.ind_sample(&mut rng)).as_slice()));
+        }
+    }
+
+#[test]
+    fn rustic() {
+        regex_tester(fizzbuzz);
+    }
+
+#[test]
+    fn original() {
+        regex_tester(original::fizzbuzz);
+    }
+
+#[test]
+    fn cfunc(){
+        regex_tester(func_call::fizzbuzz);
+    }
+
+#[test]
+    fn simplified() {
+        regex_tester(simplified::fizzbuzz);
+    }
 
 #[bench]
     fn bench_rustic(b: &mut Bencher) {
