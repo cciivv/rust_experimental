@@ -18,9 +18,9 @@ mod fzbz {
     pub fn cs_fzbz(num: int) -> String {
         if num % 15 == 0 {
             format!("Fizzbuzz")
-        } else if num % 5 == 0 {
-            format!("Fizz")
         } else if num % 3 == 0 {
+            format!("Fizz")
+        } else if num % 5 == 0 {
             format!("Buzz")
         } else {
             num.to_string()
@@ -30,9 +30,9 @@ mod fzbz {
     pub fn c_fzbz(num: int) -> String {
         if (num % 3 == 0) && (num % 5 ==  0) {
             format!("Fizzbuzz")
-        } else if num % 5 == 0 {
-            format!("Fizz")
         } else if num % 3 == 0 {
+            format!("Fizz")
+        } else if num % 5 == 0 {
             format!("Buzz")
         } else {
             num.to_string()
@@ -50,9 +50,9 @@ mod fzbz {
     pub fn cfunc_fzbz(num: int) -> String {
         if div_by_three(num) && div_by_five(num) {
             format!("Fizzbuzz")
-        } else if div_by_five(num) {
-            format!("Fizz")
         } else if div_by_three(num) {
+            format!("Fizz")
+        } else if div_by_five(num) {
             format!("Buzz")
         } else {
             num.to_string()
